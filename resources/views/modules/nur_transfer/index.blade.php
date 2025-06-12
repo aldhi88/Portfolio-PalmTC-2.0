@@ -1,0 +1,56 @@
+@extends('layouts.master')
+@section('css')
+@include('modules.nur_transfer.include.index_css')
+@endsection
+@section('js')
+@include('modules.nur_transfer.include.index_js')
+@endsection
+
+@section('content')
+
+<div class="row">
+    <div class="col">
+        <span id="alert-area-sample"></span>
+
+        <div class="card">
+
+            <div class="card-header">
+                <div class="row">
+                    <div class="col"><h5 class="mt-2"><i class="feather icon-file-text"></i> Transfer Summary</h5></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="myTable" class="table table-striped table-bordered nowrap table-xs w-100">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Sample</th>
+                            <th rowspan="2">Program</th>
+                            <th rowspan="2">Transfer<br>Count</th>
+                            <th rowspan="2">Transferred</th>
+                            <th colspan="2" class="text-center">Need Transfer</th>
+                        </tr>
+                        <tr>
+                            <th>Nursery</th>
+                            <th>Estate</th>
+                        </tr>
+                    </thead>
+                    <thead id="header-filter" class="bg-white">
+                        <tr>
+                            <th class="bg-white">Ex: 12</th>
+                            <th class="bg-white"></th>
+                            <th class="bg-white" disable="true"></th>
+                            <th class="bg-white" disable="true"></th>
+                            <th class="bg-white" disable="true"></th>
+                            <th class="bg-white" disable="true"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@endsection

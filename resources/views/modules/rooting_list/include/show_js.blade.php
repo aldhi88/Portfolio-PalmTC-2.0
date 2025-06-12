@@ -1,0 +1,153 @@
+<script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js')}}"></script>
+
+<script>
+
+var dtTable = $('#myTable').DataTable({
+    processing: true,serverSide: true,scrollX: true,pageLength: 25,
+    order: [[11, 'desc'],[13, 'desc']],
+    columnDefs: [
+        { className: 'text-center', targets: ['_all'] },
+    ],
+    ajax: {
+        url: '{{ route("rooting-lists.dtShow") }}',
+        data: function(d){ // note !
+            d.initId = '{{ $data["initId"] }}';
+            d.filter = $('select[name="filterActive"] option:selected').val();
+        }
+    },
+    columns: [
+        { data: 'import', name: 'import', orderable:true, searchable:true},
+        { data: 'bottle_date_format', name: 'bottle_date_format', orderable:true, searchable:true},
+        { data: 'tc_inits.tc_samples.program', name: 'tc_inits.tc_samples.program', orderable:false, searchable:true},
+        { data: 'tc_inits.tc_samples.sample_number_display', name: 'tc_inits.tc_samples.sample_number', orderable:true, searchable:true},
+        { data: 'bottle_type', name: 'bottle_type', orderable:false, searchable:true},
+        { data: 'alpha', name: 'alpha', orderable:false, searchable:true},
+        { data: 'tc_workers.code', name: 'tc_workers.code', orderable:false, searchable:true},
+        { data: 'column1', name: 'column1', orderable:false, searchable:false},
+        { data: 'explant1', name: 'explant1', orderable:false, searchable:false},
+        { data: 'column2', name: 'column2', orderable:false, searchable:false},
+        { data: 'bottle_count', name: 'bottle_count', orderable:false, searchable:false},
+        { data: 'leaf_count', name: 'bottle_date', orderable:true, searchable:false},
+        { data: 'last_total', name: 'last_total', orderable:false, searchable:false},
+        { data: 'last_total_leaf', name: 'created_at', orderable:true, searchable:false},
+    ],
+    initComplete: function () {
+        $('#header-filter th').each(function() {
+            var title = $(this).text();
+            var disable = $(this).attr("disable");
+            if(disable!="true"){
+                $(this).html('<input placeholder="'+title+'" type="text" class="form-control column-search px-1 form-control-sm text-center"/>');
+            }
+        });
+        $('#header-filter').on('keyup', ".column-search",function () {
+            dtTable
+                .column( $(this).parent().index() )
+                .search( this.value )
+                .draw();
+        });
+        $('#myTable_filter').css('display','inline');
+        $('#myTable_filter').html(
+            '<div class="row"><div class="col"></div><div class="col">'+
+                '<select name="filterActive" class="form-control form-control-sm">'+
+                    '<option value="1">Active</option>'+
+                    '<option value="0">All Data</option>'+
+                '</select>'+
+            '</div></div>'
+        );
+        $('select[name="filterActive"]').change(function(){
+            dtTable.ajax.reload();
+        });
+    },
+    footerCallback: function ( row, data, start, end, display ) {
+        var api = this.api(), data;
+        // Remove the formatting to get integer data for summation
+        var intVal = function ( i ) {
+            return typeof i === 'string' ?
+                i.replace(/[\$,]/g, '')*1 :
+                typeof i === 'number' ?
+                    i : 0;
+        };
+        // Total over this page
+        col1Total = api.column( 7, { page: 'current'} ).data().reduce( function (a, b) {
+            return intVal(a) + intVal(b);
+        }, 0 );
+        ex1Total = api.column( 8, { page: 'current'} ).data().reduce( function (a, b) {
+            return intVal(a) + intVal(b);
+        }, 0 );
+        col2Total = api.column( 9, { page: 'current'} ).data().reduce( function (a, b) {
+            return intVal(a) + intVal(b);
+        }, 0 );
+        firstTotal = api.column( 10, { page: 'current'} ).data().reduce( function (a, b) {
+            return intVal(a) + intVal(b);
+        }, 0 );
+        firstLeaf = api.column( 11, { page: 'current'} ).data().reduce( function (a, b) {
+            return intVal(a) + intVal(b);
+        }, 0 );
+        lastTotal = api.column( 12, { page: 'current'} ).data().reduce( function (a, b) {
+            return intVal(a) + intVal(b);
+        }, 0 );
+        lastLeaf = api.column( 13, { page: 'current'} ).data().reduce( function (a, b) {
+            return intVal(a) + intVal(b);
+        }, 0 );
+
+        // Update footer
+        $('#col1Total').html(col1Total);
+        $('#ex1Total').html(ex1Total);
+        $('#col2Total').html(col2Total);
+        $('#firstTotal').html(firstTotal);
+        $('#firstLeaf').html(firstLeaf);
+        $('#lastTotal').html(lastTotal);
+        $('#lastLeaf').html(lastLeaf);
+    }
+});
+
+
+var dtTable2 = $('#myTable2').DataTable({
+    processing: true,serverSide: true,scrollX: true,pageLength: 50,
+    order: [ [9,'desc'],[10,'desc'],[11,'desc'] ],
+    columnDefs: [
+        { className: 'text-center', targets: ['_all'] },
+    ],
+    ajax: {
+        url : '{{ route("rooting-lists.dtShow2") }}',
+        data : {
+            initId:'{{ $data["initId"] }}'
+        },
+    },
+    columns: [
+        { data: 'bottle_date_format', name: 'bottle_date_format', orderable:false, searchable:true},
+        { data: 'tc_inits.tc_samples.program', name: 'tc_inits.tc_samples.program', orderable:true, searchable:true},
+        { data: 'tc_inits.tc_samples.sample_number_display', name: 'tc_inits.tc_samples.sample_number', orderable:true, searchable:true},
+        { data: 'tc_rooting_bottles.bottle_type', name: 'tc_rooting_bottles.bottle_type', orderable:true, searchable:true},
+        { data: 'tc_rooting_bottles.alpha', name: 'tc_rooting_bottles.alpha', orderable:true, searchable:true},
+        { data: 'tc_rooting_bottles.tc_workers.code', name: 'tc_rooting_bottles.tc_workers.code', orderable:true, searchable:true},
+        { data: 'first_total', name: 'first_total', orderable:false, searchable:true},
+        { data: 'first_leaf', name: 'first_leaf', orderable:false, searchable:true},
+        { data: 'obs_date', name: 'obs_date', orderable:false, searchable:true},
+        { data: 'transfer_date', name: 'transfer_date', orderable:false, searchable:true},
+        { data: 'tc_workers.code', name: 'tc_rooting_bottles.created_at', orderable:true, searchable:true},
+        { data: 'last_total', name: 'tc_rooting_bottles.bottle_date', orderable:true, searchable:true},
+        { data: 'last_leaf', name: 'created_at', orderable:true, searchable:true},
+    ],
+    initComplete: function () {
+        $('#header-filter2 th').each(function() {
+            var title = $(this).text();
+            var disable = $(this).attr("disable");
+            if(disable!="true"){
+                $(this).html('<input placeholder="'+title+'" type="text" class="form-control column-search2 px-1 form-control-sm text-center"/>');
+            }
+        });
+        $('#header-filter2').on('keyup', ".column-search2",function () {
+            dtTable2.column( $(this).parent().index() )
+                .search( this.value )
+                .draw();
+        });
+    }
+});
+
+</script>
+
+
