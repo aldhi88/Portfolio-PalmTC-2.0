@@ -84,7 +84,7 @@
                     <td>{{ \Carbon\Carbon::parse($item->bottle_date)->format('d//m/Y') }}</td>
                     <td>{{ $item->sub }}</td>
                     <td>{{ $item->tc_workers->code }}</td>
-                    <td>{{ $item->tc_embryo_lists->last_total??'0' }}</td>
+                    <td>{{ $item->tc_embryo_lists[0]->last_total??$item->number_of_bottle }}</td>
                     <td></td>
                     <td></td>
                     <td></td>
