@@ -536,10 +536,12 @@ class EmbryoObController extends Controller
         $data['title'] = "Print Observation Form";
         $data['desc'] = "Printing observation form before input observation result";
         $data['bottles'] = TcEmbryoBottle::where('status', '!=', 0)
-            ->whereHas('tc_embryo_lists') // hanya yang punya relasi
+            // ->whereHas('tc_embryo_lists') // hanya yang punya relasi
             ->with(['tc_embryo_lists' => function ($q) {
                 $q->orderByDesc('id');
             }])
+            ->orderBy('bottle_date', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->get();
         // dd($data['bottles']->toArray());
 
