@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,10 @@ class TcEmbryoBottle extends Model
     protected $guarded = [];
 
     // relationship
+    public function tc_embryo_lists():HasOne
+    {
+        return $this->hasOne(TcEmbryoList::class, 'tc_embryo_bottle_id','id');
+    }
     public function tc_embryo_ob_details(){
         return $this->hasMany(TcEmbryoObDetail::class,'tc_embryo_bottle_id');
     }

@@ -63,7 +63,7 @@
                 <th rowspan="2">Sample</th>
                 <th rowspan="2">Bottle<br>Date</th>
                 <th rowspan="2">Sub</th>
-                <th rowspan="2">Name</th>
+                <th rowspan="2">Code</th>
                 <th rowspan="2">Total</th>
                 <th colspan="6">Observation</th>
             </tr>
@@ -84,7 +84,7 @@
                     <td>{{ \Carbon\Carbon::parse($item->bottle_date)->format('d//m/Y') }}</td>
                     <td>{{ $item->sub }}</td>
                     <td>{{ $item->tc_workers->code }}</td>
-                    <td>{{ $item->number_of_bottle }}</td>
+                    <td>{{ $item->tc_embryo_lists->last_total??'0' }}</td>
                     <td></td>
                     <td></td>
                     <td></td>

@@ -538,8 +538,11 @@ class EmbryoObController extends Controller
         $data['title'] = "Print Observation Form";
         $data['desc'] = "Printing observation form before input observation result";
         $data['bottles'] = TcEmbryoBottle::where('status','!=',0)
+            ->whereHas('tc_embryo_lists')
             ->get();
+        // dd($data['bottles']->toArray());
 
         return view('modules.embryo_ob.print.form_obs',compact('data'));
     }
 }
+
