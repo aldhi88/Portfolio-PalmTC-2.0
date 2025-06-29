@@ -685,6 +685,11 @@ class RootingObController extends Controller
         $data['title'] = "Print Observation Form";
         $data['desc'] = "Printing observation form before input observation result";
         $data['bottles'] = TcRootingBottle::where('status','!=',0)
+            ->with(['tc_rooting_transactions' => function ($q) {
+                        $q->orderByDesc('id');
+                }])
+            ->orderBy('bottle_date', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->get();
 
         return view('modules.rooting_ob.print.form_obs',compact('data'));

@@ -50,7 +50,6 @@
                     <div class="col"><h5><i class="feather icon-file-text"></i> All Data Bottle</h5></div>
                     <div class="col text-right">
                         <button id="btnPrint" class="btn btn-info btn-sm rounded-0 mr-1"><i class="feather mr-2 icon-printer"></i>Print Form</button>
-                        <a href="{{ route("embryo-obs.printObsForm") }}" class="btn btn-info btn-sm rounded-0 mr-1"><i class="feather mr-2 icon-printer"></i>Print Form</a>
                     </div>
                 </div>
             </div>

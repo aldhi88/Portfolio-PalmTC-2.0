@@ -86,7 +86,7 @@
                     <td>{{ $item->alpha }}</td>
                     <td>{{ $item->cycle }}</td>
                     <td>{{ $item->tc_workers->code }}</td>
-                    <td>{{ $item->bottle_count }}</td>
+                    <td>{{ $item->tc_liquid_transactions[0]->last_total??$item->bottle_count }}</td>
                     <td></td>
                     <td></td>
                     <td></td>

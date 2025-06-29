@@ -534,6 +534,11 @@ class GerminObController extends Controller
         $data['title'] = "Print Observation Form";
         $data['desc'] = "Printing observation form before input observation result";
         $data['bottles'] = TcGerminBottle::where('status','!=',0)
+            ->with(['tc_germin_transactions' => function ($q) {
+                    $q->orderByDesc('id');
+            }])
+            ->orderBy('bottle_date', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->get();
 
         return view('modules.germin_ob.print.form_obs',compact('data'));

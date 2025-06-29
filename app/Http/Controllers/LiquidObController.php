@@ -552,6 +552,11 @@ class LiquidObController extends Controller
         $data['title'] = "Print Observation Form";
         $data['desc'] = "Printing observation form before input observation result";
         $data['bottles'] = TcLiquidBottle::where('status','!=',0)
+            ->with(['tc_liquid_transactions' => function ($q) {
+                    $q->orderByDesc('id');
+            }])
+            ->orderBy('bottle_date', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->get();
 
         return view('modules.liquid_ob.print.form_obs',compact('data'));

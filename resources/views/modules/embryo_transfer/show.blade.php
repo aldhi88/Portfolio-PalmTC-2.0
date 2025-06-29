@@ -66,7 +66,7 @@
 <div class="row">
     <div class="col">
         <span id="alert-area-1"></span>
-        <div class="card">
+        {{-- <div class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -97,7 +97,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="card">
 
             <div class="card-header">

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,10 @@ class TcMaturBottle extends Model
     protected $guarded = [];
 
     // relation
+    public function tc_matur_transactions():HasMany
+    {
+        return $this->hasMany(TcMaturTransaction::class,'tc_matur_bottle_id', 'id');
+    }
     public function tc_bottles(){
         return $this->belongsTo(TcBottle::class,'tc_bottle_id');
     }

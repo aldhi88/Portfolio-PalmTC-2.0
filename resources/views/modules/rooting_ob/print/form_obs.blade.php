@@ -64,13 +64,13 @@
                 <th rowspan="2">Bottle<br>Date</th>
                 <th rowspan="2">Alpha</th>
                 <th rowspan="2">Name</th>
-                <th rowspan="2">Total</th>
+                <th rowspan="2">Total <br> Daun</th>
                 <th colspan="6">Observation</th>
             </tr>
             <tr>
                 <th>Worker</th>
                 <th width="80">Date</th>
-                <th>Matur</th>
+                <th>Rooting</th>
                 <th>Oxidate</th>
                 <th>Contam</th>
                 <th>Other</th>
@@ -84,7 +84,7 @@
                     <td>{{ \Carbon\Carbon::parse($item->date_work)->format('d//m/Y') }}</td>
                     <td>{{ $item->alpha }}</td>
                     <td>{{ $item->tc_workers->code }}</td>
-                    <td>{{ $item->bottle_count }}</td>
+                    <td>{{ $item->tc_rooting_transactions[0]->last_leaf??$item->leaf_count }}</td>
                     <td></td>
                     <td></td>
                     <td></td>

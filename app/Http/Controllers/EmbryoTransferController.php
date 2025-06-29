@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class EmbryoTransferController extends Controller
-    {
+{
     public function index()
     {
         $data['title'] = "Embryogenesis Transfer (View Per Sample)";

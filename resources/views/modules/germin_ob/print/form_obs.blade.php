@@ -70,7 +70,7 @@
             <tr>
                 <th>Worker</th>
                 <th width="80">Date</th>
-                <th>Matur</th>
+                <th>Germin</th>
                 <th>Oxidate</th>
                 <th>Contam</th>
                 <th>Other</th>
@@ -84,7 +84,7 @@
                     <td>{{ \Carbon\Carbon::parse($item->date_work)->format('d//m/Y') }}</td>
                     <td>{{ $item->alpha }}</td>
                     <td>{{ $item->tc_workers->code }}</td>
-                    <td>{{ $item->bottle_count }}</td>
+                    <td>{{ $item->tc_germin_transactions[0]->last_total??$item->bottle_count }}</td>
                     <td></td>
                     <td></td>
                     <td></td>

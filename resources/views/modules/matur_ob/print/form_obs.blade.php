@@ -84,7 +84,7 @@
                     <td>{{ \Carbon\Carbon::parse($item->date_work)->format('d//m/Y') }}</td>
                     <td>{{ $item->alpha }}</td>
                     <td>{{ $item->tc_workers->code }}</td>
-                    <td>{{ $item->bottle_count }}</td>
+                    <td>{{ $item->tc_matur_transactions[0]->last_total??$item->bottle_count }}</td>
                     <td></td>
                     <td></td>
                     <td></td>
