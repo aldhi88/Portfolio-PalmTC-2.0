@@ -44,7 +44,7 @@
                             <th>Field<br>Active</th>
                         </tr>
                     </thead>
-                    <thead id="header-filter2" class="bg-white">
+                    <thead id="header-filter" class="bg-white">
                         <tr>
                             <th class="bg-white" disable="true"></th>
                             <th class="bg-white"></th>

@@ -355,7 +355,7 @@ class HardenObController extends Controller
             ->addColumn('pre_nursery_form',function($data) use($obsId){
                 $q = TcHardenObDetail::where('tc_harden_ob_id',$obsId)
                     ->where('tc_harden_tree_id',$data->id)->get();
-                $el = '<input type="date" name="pre_nursery" class="form-control form-control-sm item-'.$data->id.'" value="'.date('Y-m-d').'" data-id="'.$data->id.'">';
+                $el = '<input type="date" name="pre_nursery" class="form-control form-control-sm item-'.$data->id.'" value="" data-id="'.$data->id.'">';
                 if(count($q)!=0){
                     if($q->first()->is_transfer == 1){
                         $el = '<input type="date" name="pre_nursery" class="form-control form-control-sm item-'.$data->id.'" value="'.Carbon::parse($q[0]->pre_nursery)->format('Y-m-d').'" data-id="'.$data->id.'">';

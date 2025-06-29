@@ -87,6 +87,7 @@
                                     <th rowspan="2">Transfer <br> Date</th>
                                     <th rowspan="2">Worker</th>
                                     <th rowspan="2">Laminar</th>
+                                    <th rowspan="2">Type</th>
                                     <th rowspan="2">Alpha</th>
                                     <th colspan="2" class="text-center">Rooting 1</th>
                                     <th rowspan="2">Rooting 2</th>

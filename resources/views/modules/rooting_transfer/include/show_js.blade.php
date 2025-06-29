@@ -47,6 +47,7 @@
             { data: 'transfer_date_format', name: 'transfer_date', orderable:true, searchable:false},
             { data: 'tc_workers.code', name: 'tc_workers.code', orderable:false, searchable:false},
             { data: 'tc_laminars.code', name: 'tc_laminars.code', orderable:false, searchable:false},
+            { data: 'comment', name: 'comment', orderable:false, searchable:false},
             { data: 'alpha', name: 'alpha', orderable:false, searchable:false},
             { data: 'to_root1_bottle', name: 'to_root1_bottle', orderable:false, searchable:false},
             { data: 'to_root1_leaf', name: 'to_root1_leaf', orderable:false, searchable:false},

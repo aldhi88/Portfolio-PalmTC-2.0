@@ -56,6 +56,36 @@ var dtTable = $('#myTable').DataTable({
         });
         onClickDetail();
     },
+    footerCallback: function ( row, data, start, end, display ) {
+        var api = this.api(), data;
+        // Remove the formatting to get integer data for summation
+        var intVal = function ( i ) {
+            return typeof i === 'string' ?
+                i.replace(/[\$,]/g, '')*1 :
+                typeof i === 'number' ?
+                    i : 0;
+        };
+        // Total over this page
+        firstTotal = api.column( 5, { page: 'current'} ).data().reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+        col1 = api.column( 6, { page: 'current'} ).data().reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+        col2 = api.column( 7, { page: 'current'} ).data().reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+
+        col3 = api.column( 8, { page: 'current'} ).data().reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+
+        // Update footer
+        $('#firstTotal').html(firstTotal);
+        $('#col1').html(col1);
+        $('#col2').html(col2);
+        $('#col3').html(col3);
+    }
 
 });
 

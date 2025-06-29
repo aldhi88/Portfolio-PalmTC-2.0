@@ -35,7 +35,11 @@ function addItemStep2(){
             data: formData,
             cache: false, contentType: false, processData: false,
             success: (a) => {
-                genStep2();
+                if(a.status == 'duplicate'){
+                    alert(a.msg);
+                }else{
+                    genStep2();
+                }
                 loader(false);
             },
             error: (a) => {

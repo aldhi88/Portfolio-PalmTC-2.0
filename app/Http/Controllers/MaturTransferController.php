@@ -134,6 +134,7 @@ class MaturTransferController extends Controller
             'maturtrans_step1' => $dtSession,
             'maturtrans_step2' => $dtStep2
         ]);
+        // dd($dtSession);
     }
     //step2
     public function getStep2(Request $request)

@@ -55,6 +55,36 @@ var dtTable = $('#myTable').DataTable({
         });
         onClickDetail();
     },
+    footerCallback: function ( row, data, start, end, display ) {
+        var api = this.api(), data;
+        // Remove the formatting to get integer data for summation
+        var intVal = function ( i ) {
+            return typeof i === 'string' ?
+                i.replace(/[\$,]/g, '')*1 :
+                typeof i === 'number' ?
+                    i : 0;
+        };
+        // Total over this page
+        firstTotal = api.column( 4, { page: 'current'} ).data().reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+        col1 = api.column( 5, { page: 'current'} ).data().reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+        col2 = api.column( 6, { page: 'current'} ).data().reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+
+        col3 = api.column( 7, { page: 'current'} ).data().reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+
+        // Update footer
+        $('#firstTotal').html(firstTotal);
+        $('#col1').html(col1);
+        $('#col2').html(col2);
+        $('#col3').html(col3);
+    }
 
 });
 
@@ -86,15 +116,15 @@ var dtTable3 = $('#myTable3').DataTable({
         { data: 'total_active', name: 'total_active', orderable:false, searchable:false},
     ],
     initComplete: function () {
-        $('#header-filter th').each(function() {
+        $('#header-filter3 th').each(function() {
             var title = $(this).text();
             var disable = $(this).attr("disable");
             if(disable!="true"){
-                $(this).html('<input placeholder="'+title+'" type="text" class="form-control column-search px-1 form-control-sm text-center"/>');
+                $(this).html('<input placeholder="'+title+'" type="text" class="form-control column-search3 px-1 form-control-sm text-center"/>');
             }
         });
-        $('#header-filter').on('keyup', ".column-search",function () {
-            dtTable
+        $('#header-filter3').on('keyup', ".column-search3",function () {
+            dtTable3
                 .column( $(this).parent().index() )
                 .search( this.value )
                 .draw();
@@ -151,7 +181,7 @@ var dtTable2 = $('#myTable2').DataTable({
             }
         });
         $('#header-filter2').on('keyup', ".column-search2",function () {
-            dtTable
+            dtTable2
                 .column( $(this).parent().index() )
                 .search( this.value )
                 .draw();

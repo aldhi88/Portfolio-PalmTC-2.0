@@ -1,5 +1,6 @@
 <script>
     $("#transferModal").on("show.bs.modal", function(e) {
+        $('#alert-area-modal-transfer').empty();
         var obsId = $(e.relatedTarget).data('id');
         var val = $(e.relatedTarget).data('val');
         var hardenDate = $(e.relatedTarget).data('hardendate');

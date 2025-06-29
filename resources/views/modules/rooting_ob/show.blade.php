@@ -103,7 +103,8 @@
                     <thead>
                         <tr>
                             <th rowspan="2">Obs<br>Date</th>
-                            <th rowspan="2">Alpha</th>
+                            {{-- <th rowspan="2">Type</th>
+                            <th rowspan="2">Alpha</th> --}}
                             <th rowspan="2">Worker</th>
                             <th colspan="2" class="text-center">Rooting</th>
                             <th colspan="2" class="text-center">Oxidate</th>
@@ -124,7 +125,8 @@
                     <thead id="header-filter" class="bg-white">
                         <tr>
                             <th class="bg-white" disable="true"></th>
-                            <th class="bg-white"></th>
+                            {{-- <th class="bg-white" disable="true"></th>
+                            <th class="bg-white"></th> --}}
                             <th class="bg-white"></th>
                             <th class="bg-white" disable="true"></th>
                             <th class="bg-white" disable="true"></th>

@@ -118,7 +118,7 @@ class FieldListController extends Controller
             ])
         ;
         if($request->filter == 1 || !isset($request->filter)){
-            $data->where('status','!=',0);
+            $data->where('tc_fields.status','!=',0);
         }
 
         return DataTables::of($data)

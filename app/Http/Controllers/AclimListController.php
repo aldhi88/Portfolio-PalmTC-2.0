@@ -133,7 +133,7 @@ class AclimListController extends Controller
             ])
         ;
         if($request->filter == 1 || !isset($request->filter)){
-            $data->where('status','!=',0);
+            $data->where('tc_aclims.status','!=',0);
         }
 
         return DataTables::of($data)
@@ -158,7 +158,7 @@ class AclimListController extends Controller
                 return $el;
             })
             ->rawColumns(['tree_date_action'])
-            ->smart(false)->toJson();
+            ->smart(true)->toJson();
     }
 
     public function dtShow2(Request $request)
@@ -186,7 +186,7 @@ class AclimListController extends Controller
                 return $el;
             })
             ->rawColumns(['status_format','skor_akar'])
-            ->smart(false)->toJson();
+            ->smart(true)->toJson();
     }
 
     public function changeStatus(Request $request)

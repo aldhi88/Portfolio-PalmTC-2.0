@@ -7,7 +7,7 @@
 
 var dtTable = $('#myTable').DataTable({
     processing: true,serverSide: true,scrollX: true,pageLength: 25,
-    order: [ [5, 'desc'],[10, 'desc']],
+    order: [ [6, 'desc'],[10, 'desc']],
     columnDefs: [
         { className: 'text-center', targets: ['_all'] },
     ],

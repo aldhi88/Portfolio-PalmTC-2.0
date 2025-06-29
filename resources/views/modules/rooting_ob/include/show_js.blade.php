@@ -18,7 +18,8 @@
         },
         columns: [
             { data: 'ob_date_format', name: 'ob_date', orderable:true, searchable:false},
-            { data: 'alpha', name: 'alpha', orderable:true, searchable:true},
+            // { data: 'alpha', name: 'alpha', orderable:true, searchable:true},
+            // { data: 'alpha', name: 'alpha', orderable:true, searchable:true},
             { data: 'tc_workers.code', name: 'tc_workers.code', orderable:false, searchable:false},
             { data: 'total_bottle_rooting', name: 'total_bottle_rooting', orderable:false, searchable:false},
             { data: 'total_leaf_rooting', name: 'total_leaf_rooting', orderable:false, searchable:false},

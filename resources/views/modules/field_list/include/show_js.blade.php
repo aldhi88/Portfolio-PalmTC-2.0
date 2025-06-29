@@ -93,7 +93,7 @@ var dtTable2 = $('#myTable2').DataTable({
             }
         });
         $('#header-filter2').on('keyup', ".column-search2",function () {
-            dtTable
+            dtTable2
                 .column( $(this).parent().index() )
                 .search( this.value )
                 .draw();

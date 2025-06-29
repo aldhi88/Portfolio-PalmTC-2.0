@@ -263,7 +263,7 @@ class GerminListController extends Controller
                 return $total;
             })
             ->rawColumns(['date_work_format'])
-            ->smart(false)
+            ->smart(true)
             ->toJson();
     }
     public function dtShow2(Request $request)

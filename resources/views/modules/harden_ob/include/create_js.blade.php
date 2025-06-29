@@ -61,6 +61,14 @@
                 { data: 'pre_nursery_form', name: 'pre_nursery_form', orderable:false, searchable:false},
             ],
             initComplete: function () {
+                let dateValue = $('input[name="date_ob"]').val();
+                // cari semua input[name="pre_nursery"] dalam DataTable
+                $('#myTable')
+                    .find('input[name="pre_nursery"]')
+                    .each(function() {
+                        $(this).val(dateValue);
+                    });
+
                 $('#header-filter2 th').each(function() {
                     var title = $(this).text();
                     var disable = $(this).attr("disable");

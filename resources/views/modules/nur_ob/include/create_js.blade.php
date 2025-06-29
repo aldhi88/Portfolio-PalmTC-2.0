@@ -8,8 +8,8 @@
         loader(true);
         e.preventDefault();
         var formData = new FormData(this);
-        formData.append('tc_nur_id', '{{ $data["tc_nur_id"] }}'); 
-        formData.append('tc_init_id', '{{ $data["initId"] }}'); 
+        formData.append('tc_nur_id', '{{ $data["tc_nur_id"] }}');
+        formData.append('tc_init_id', '{{ $data["initId"] }}');
         $.ajax({
             type: 'POST',
             url: "{{ route('nur-obs.store') }}",
@@ -60,6 +60,13 @@
                 { data: 'pre_nursery_form', name: 'pre_nursery_form', orderable:false, searchable:false},
             ],
             initComplete: function () {
+                let dateValue = $('input[name="date_ob"]').val();
+                // cari semua input[name="pre_nursery"] dalam DataTable
+                $('#myTable')
+                    .find('input[name="pre_nursery"]')
+                    .each(function() {
+                        $(this).val(dateValue);
+                    });
                 $('#header-filter2 th').each(function() {
                     var title = $(this).text();
                     var disable = $(this).attr("disable");
@@ -72,10 +79,10 @@
                 });
                 initFormObs();
             },
-            
+
         });
     }
-    
+
     function initFormObs(){
         $("body").on('click','input.item', function() {
             loader(true);
@@ -157,7 +164,7 @@
                     alert("Error #003, CallusObservationController - store function is invalid.");
                 }
             });
-            
+
         });
     }
 

@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col">
         <div class="bg-light border px-3 pb-0 pt-2">
-            
+
             <div class="row">
                 <div class="col">
                     <div class="form-group mb-1 border-right border-bottom">
@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-                
+
         </div>
     </div>
 </div>

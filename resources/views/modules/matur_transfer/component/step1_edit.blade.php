@@ -39,7 +39,7 @@
         <div class="col">
             <div class="form-group">
                 <label class="font-weight-bold">Alpha</label>
-                <select name="alphaCycle" class="form-control form-control-sm">
+                <select name="alpha" class="form-control form-control-sm">
                     @foreach ($data['subCultere'] as $item)
                         <option {{ $item->alpha == $dtSession['alpha']?'selected':null }} value="{{ $item->alpha }}">{{ $item->alpha }}</option>
                     @endforeach

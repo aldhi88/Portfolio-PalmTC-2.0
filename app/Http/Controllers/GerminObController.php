@@ -437,6 +437,7 @@ class GerminObController extends Controller
 
         $q = TcGerminOb::select('id')
             ->where('status',0)
+            ->where('tc_init_id', $id)
             ->get();
 
         $data['obId'] = count($q)==0? 0 : $q->first()->id;

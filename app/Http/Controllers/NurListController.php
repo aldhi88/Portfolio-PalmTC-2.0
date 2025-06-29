@@ -153,7 +153,7 @@ class NurListController extends Controller
             ])
         ;
         if($request->filter == 1 || !isset($request->filter)){
-            $data->where('status','!=',0);
+            $data->where('tc_nurs.status','!=',0);
         }
 
         return DataTables::of($data)
@@ -171,7 +171,7 @@ class NurListController extends Controller
                 return $el;
             })
             ->rawColumns(['tree_date_action','cat_format'])
-            ->smart(false)->toJson();
+            ->smart(true)->toJson();
     }
 
     public function dtShow3(Request $request)
@@ -239,7 +239,7 @@ class NurListController extends Controller
                 return $el;
             })
             ->rawColumns(['tree_date_action','cat_format'])
-            ->smart(false)->toJson();
+            ->smart(true)->toJson();
     }
 
     public function dtShow2(Request $request)

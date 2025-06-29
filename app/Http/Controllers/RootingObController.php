@@ -314,9 +314,9 @@ class RootingObController extends Controller
             if(count($dtDetailPerBottle) == 0){ //jika data ob detail untuk bottle itu belum ada
                 if(count($dtDetailPerOb) != 0){
                     $dataSub = $dtDetailPerOb[0]['tc_rooting_bottles']['alpha'];
-                    if($request->alpha != $dataSub){
-                        return $this->returnTemplate(0,'Error, alpha is different from before data.');
-                    }
+                    // if($request->alpha != $dataSub){
+                    //     return $this->returnTemplate(0,'Error, alpha is different from before data.');
+                    // }
                 }
                 if($request->value != 0){ //hanya proses jika yg diinput tidak 0
                     if($stokAkhirLeaf >= $request->value){
@@ -587,7 +587,10 @@ class RootingObController extends Controller
         $data['totalContam'] = $q->where('status',1)->sum('total_leaf_contam');
         $data['totalOther'] = $q->where('status',1)->sum('total_leaf_other');
 
-        $q = TcRootingOb::select('id')->where('status',0)->get();
+        $q = TcRootingOb::select('id')
+            ->where('status',0)
+            ->where('tc_init_id', $id)
+            ->get();
 
         $data['obId'] = count($q)==0? 0 : $q->first()->id;
         $data['initId'] = $id;

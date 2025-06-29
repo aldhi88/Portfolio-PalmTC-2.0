@@ -184,6 +184,14 @@ class RootingTransferController extends Controller
         $dtSessionData = collect($dtSession['data']);
         $obsId = $request->id;
         $dtFilter = array_values($dtSessionData->where('id',$obsId)->toArray());
+        if(count($dtSession['data']) > 0){
+            if ($dtSession['data'][0]['bottle_type'] !== $request->bottle_type) {
+                return response()->json([
+                    'status' => 'duplicate',
+                    'msg' => 'Type '.$request->bottle_type.' tidak sama.',
+                ]);
+            }
+        }
         if(count($dtFilter) != 0){
             $oldCount = $dtFilter[0]['work_leaf'];
             $newCount = $request->work_leaf;
@@ -348,7 +356,7 @@ class RootingTransferController extends Controller
     }
     public function finishStep3(Request $request)
     {
-        dump($request->all());
+        // dump($request->all());
         $back = $request->to_back;
         $root2 = $request->to_root2;
         $next = $request->to_next;
@@ -356,6 +364,13 @@ class RootingTransferController extends Controller
             return alert(0,'Error, no data new bottle transfer','alert-step3');
         }
         $dtSession = session('rootingtrans_step3');
+        $workLeaf = array_sum(array_column(session('rootingtrans_step2')['data'], 'work_leaf'));
+        $totalLeaf = $request->leaf_count + $request->to_next + ($request->to_root2*2);
+        // dd($workLeaf, $totalLeaf);
+        if($totalLeaf > $workLeaf){
+            return alert(0,'Error, jumlah daun melebihi work plantlet','alert-step3');
+        }
+        // dd($request->all(), $dtSession, session('rootingtrans_step2'));
         $data = $request->except('_token');
         $data['to_root2_leaf'] = $request->to_root2;
         $dtSession['data'] = $data;
@@ -426,11 +441,13 @@ class RootingTransferController extends Controller
 
                     // insert ke table tc_rooting_transfers
                     $dt1 = $dtStep1->toArray();
+                    // dd($dt1);
                     $dt1['tc_init_id'] = $request->tc_init_id;
                     $dt1['to_root1_bottle'] = $dtStep3Data['to_back'];
                     $dt1['to_root1_leaf'] = $dtStep3Data['leaf_count'];
                     $dt1['to_root2'] = $dtStep3Data['to_root2'];
                     $dt1['to_aclim'] = $dtStep3Data['to_next'];
+                    $dt1['comment'] = session('rootingtrans_step2')['data'][0]['bottle_type'];
                     $q = TcRootingTransfer::create($dt1);
                     $transferId = $q->id;
 

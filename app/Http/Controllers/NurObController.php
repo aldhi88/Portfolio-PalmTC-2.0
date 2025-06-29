@@ -90,7 +90,7 @@ class NurObController extends Controller
                     ;
                 }
             ]);
-        }   
+        }
 
         // dd($data->get()->toArray());
         return DataTables::of($data)
@@ -163,7 +163,7 @@ class NurObController extends Controller
         if($request->filter == 1 || !isset($request->filter)){
             $data->where('tc_nurs.status','!=',0);
         }
-        
+
         $dtDeath = TcDeath::all();
         foreach ($dtDeath as $key => $value) {
             $deathId = $value->id;
@@ -172,7 +172,7 @@ class NurObController extends Controller
                     $q->where('is_death',1)->where('tc_death_id',$deathId);
                 }
             ]);
-        }   
+        }
 
         $initId = $request->initId;
         return DataTables::of($data)
@@ -190,11 +190,11 @@ class NurObController extends Controller
                     $obId = $q->id;
                 }else{
                     $obId = $q->first()->id;
-                }   
+                }
 
                 if($data->total_active != 0){
                     $el .= '
-                        <a class="text-primary detail fs-13" data-date="'.$data->tree_date_format.'" data-id="'.$data->id.'" href="'.route('nur-obs.create',$obId).'">Obs</a> - 
+                        <a class="text-primary detail fs-13" data-date="'.$data->tree_date_format.'" data-id="'.$data->id.'" href="'.route('nur-obs.create',$obId).'">Obs</a> -
                     ';
                 }
 
@@ -251,7 +251,7 @@ class NurObController extends Controller
                     $q->where('is_death',1)->where('tc_death_id',$deathId);
                 }
             ]);
-        } 
+        }
         return DataTables::of($data)
             ->addColumn('tree_date_format',function($data){
                 return Carbon::parse($data->tc_nurs->tree_date)->format('d/m/Y');
@@ -373,7 +373,7 @@ class NurObController extends Controller
             ->addColumn('pre_nursery_form',function($data) use($obsId){
                 $q = TcNurObDetail::where('tc_nur_ob_id',$obsId)
                     ->where('tc_nur_tree_id',$data->id)->get();
-                $el = '<input type="date" name="pre_nursery" class="form-control form-control-sm item-'.$data->id.'" value="'.date('Y-m-d').'" data-id="'.$data->id.'">';
+                $el = '<input type="date" name="pre_nursery" class="form-control form-control-sm item-'.$data->id.'" value="" data-id="'.$data->id.'">';
                 if(count($q)!=0){
                     if($q->first()->is_transfer == 1){
                         $el = '<input type="date" name="pre_nursery" class="form-control form-control-sm item-'.$data->id.'" value="'.Carbon::parse($q[0]->pre_nursery)->format('Y-m-d').'" data-id="'.$data->id.'">';
@@ -382,7 +382,7 @@ class NurObController extends Controller
                 return $el;
             })
             ->rawColumns(['status_format','death_form','transfer_form','pre_nursery_form'])
-            ->smart(false)->toJson();
+            ->smart(true)->toJson();
     }
 
     public function storeDetail(Request $request)

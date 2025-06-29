@@ -52,10 +52,10 @@
                             <th class="bg-white"></th>
                             <th class="bg-white"></th>
                             <th class="bg-white"></th>
-                            <th class="bg-white" disable="true"></th>
-                            <th class="bg-white" disable="true"></th>
-                            <th class="bg-white" disable="true"></th>
-                            <th class="bg-white" disable="true"></th>
+                            <th id="firstTotal" class="bg-white text-center" disable="true"></th>
+                            <th id="col1" class="bg-white text-center" disable="true"></th>
+                            <th id="col2" class="bg-white text-center" disable="true"></th>
+                            <th id="col3" class="bg-white text-center" disable="true"></th>
                         </tr>
                     </thead>
                     <tbody></tbody>
