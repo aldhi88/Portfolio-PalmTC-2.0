@@ -8,8 +8,10 @@ use App\Models\TcInit;
 use App\Models\TcRootingBottle;
 use App\Models\TcRootingComment;
 use App\Models\TcRootingOb;
+use App\Models\TcRootingObDetail;
 use App\Models\TcRootingTransaction;
 use App\Models\TcRootingTransfer;
+use App\Models\TcRootingTransferBottle;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DataTables;
@@ -28,6 +30,23 @@ class RootingListController extends Controller
         $data['column2'] = TcBottleInit::where('keyword','rooting_column2')->first()->getAttribute('column_name');
         return view('modules.rooting_list.index',compact('data'));
     }
+    public function rollbackImport($id)
+    {
+        TcRootingBottle::where('tc_init_id', $id)->forceDelete();
+        TcRootingTransaction::where('tc_init_id', $id)->forceDelete();
+        TcRootingOb::where('tc_init_id', $id)->forceDelete();
+        TcRootingObDetail::where('tc_init_id', $id)->forceDelete();
+        TcRootingTransferBottle::where('tc_init_id', $id)->forceDelete();
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'type' => 'success',
+                'icon' => 'check',
+                'el' => 'alert-area',
+                'msg' => 'Success, data has been deleted.',
+            ],
+        ]);
+    }
     public function dt()
     {
         $q = TcBottleInitDetail::select('tc_bottle_id')
@@ -44,6 +63,8 @@ class RootingListController extends Controller
             ->whereHas('tc_rooting_bottles')
             ->with([
                 'tc_samples',
+                'tc_rooting_bottles:id,tc_init_id,tc_worker_id,tc_laminar_id',
+                'tc_rooting_transactions:id,tc_init_id,tc_worker_id',
             ])
             ->withCount([
                 'tc_rooting_bottles as first_total' => function($q){
@@ -77,8 +98,17 @@ class RootingListController extends Controller
         return DataTables::of($data)
             ->addColumn('sample_number_format',function($data){
                 $el = '<p class="mb-0"><strong>'.$data->tc_samples->sample_number_display.'</strong></p>';
+                $el .= '<p class="mb-0">';
+
+                $isNotImport = $data['tc_rooting_transactions']->contains(function ($item) {
+                    return $item['tc_worker_id'] != 99;
+                });
+
+                if (!$isNotImport) {
+                    $el .= '<a href="#" class="btn-delete text-danger" data-url="'.route('rooting-lists.rollbackImport', $data->id).'">Delete</a>
+                            <span class="text-muted mx-1">-</span>';
+                }
                 $el .= '
-                    <p class="mb-0">
                         <a class="text-primary" href="'.route('rooting-lists.show',$data->id).'">Detail</a>
                 ';
                 $el .= "

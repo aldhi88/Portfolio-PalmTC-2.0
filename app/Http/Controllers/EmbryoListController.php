@@ -8,7 +8,9 @@ use App\Models\TcEmbryoBottleSubtraction;
 use App\Models\TcEmbryoComment;
 use App\Models\TcEmbryoList;
 use App\Models\TcEmbryoOb;
+use App\Models\TcEmbryoObDetail;
 use App\Models\TcEmbryoTransfer;
+use App\Models\TcEmbryoTransferBottle;
 use App\Models\TcInit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,11 +33,15 @@ class EmbryoListController extends Controller
     }
     public function dt()
     {
-        $data = TcInit::select(['tc_inits.id','tc_inits.tc_sample_id'])
+        $data = TcInit::select([
+                    'tc_inits.id',
+                    'tc_inits.tc_sample_id',
+                ])
             ->whereHas('tc_embryo_bottles')
             ->with([
                 'tc_samples:id,sample_number,program',
-                'tc_embryo_bottles:tc_worker_id'
+                'tc_embryo_bottles:id,tc_init_id,tc_worker_id,tc_laminar_id',
+                'tc_embryo_lists:id,tc_init_id,tc_worker_id',
             ])
             ->withCount([
                 'tc_embryo_bottles as first_total' => function($q){
@@ -43,13 +49,27 @@ class EmbryoListController extends Controller
                 }
             ])
         ;
+        // dd($data->get()->toArray());
         return DataTables::of($data)
             ->addColumn('sample_number_format',function($data){
                 $el = '<p class="mb-0"><strong>'.$data->tc_samples->sample_number_display.'</strong></p>';
+                $el .= '<p class="mb-0">';
+
+
+                $isNotImportEmbryoList = $data['tc_embryo_lists']->contains(function ($item) {
+                    return $item['tc_worker_id'] != 99;
+                });
+
+                if (!$isNotImportEmbryoList) {
+                    $el .= '<a href="#" class="btn-delete text-danger" data-url="'.route('embryo-lists.rollbackImport', $data->id).'">Delete</a>
+                            <span class="text-muted mx-1">-</span>';
+                }
+
+
                 $el .= '
-                    <p class="mb-0">
                         <a class="text-primary" href="'.route('embryo-lists.show',$data->id).'">Detail</a>
                 ';
+
                 $el .= "
                         <span class='text-muted mx-1'>-</span>
                         <a class='text-primary' data-id='".$data->id."' href='".route('embryo-lists.comment',$data->id)."'>Comment</a>
@@ -74,6 +94,24 @@ class EmbryoListController extends Controller
             ->rawColumns(['sample_number_format'])
             ->smart(false)
             ->toJson();
+    }
+
+    public function rollbackImport($id)
+    {
+        TcEmbryoBottle::where('tc_init_id', $id)->forceDelete();
+        TcEmbryoList::where('tc_init_id', $id)->forceDelete();
+        TcEmbryoOb::where('tc_init_id', $id)->forceDelete();
+        TcEmbryoObDetail::where('tc_init_id', $id)->forceDelete();
+        TcEmbryoTransferBottle::where('tc_init_id', $id)->forceDelete();
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'type' => 'success',
+                'icon' => 'check',
+                'el' => 'alert-area',
+                'msg' => 'Success, data has been deleted.',
+            ],
+        ]);
     }
 
     public function show($id)

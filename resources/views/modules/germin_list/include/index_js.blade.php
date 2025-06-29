@@ -39,6 +39,28 @@ var dtTable = $('#myTable').DataTable({
     }
 });
 
+$(document).on('click', '.btn-delete', function(e) {
+    e.preventDefault();
+    const url = $(this).data('url');
+    if (confirm('Yakin ingin menghapus data ini?')) {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                _method: 'DELETE'
+            },
+            success: function(a) {
+                showAlert(a.data.type, a.data.icon, a.data.el, a.data.msg);
+                dtTable.ajax.reload();
+            },
+            error: function(xhr) {
+                alert(xhr.responseJSON?.message || 'Terjadi kesalahan saat menghapus.');
+            }
+        });
+    }
+});
+
 $('#formImportModal').submit(function(e) {
     loader(true);
     e.preventDefault();

@@ -6,38 +6,60 @@
 <script>
 
 var dtTable = $('#myTable').DataTable({
-        processing: true,serverSide: true,scrollX: true,
-        pageLength: 25,
-        order: [
-            [0, 'desc'],
-        ],
-        columnDefs: [
-            { className: 'text-center', targets: ['_all'] },
-        ],
-        ajax: '{{ route("matur-lists.dt") }}',
-        columns: [
-            { data: 'sample_number_format', name: 'tc_samples.sample_number', orderable:true, searchable:true},
-            { data: 'tc_samples.program', name: 'tc_samples.program', orderable:true, searchable:true},
-            { data: 'column1', name: 'column1', orderable:true, searchable:true},
-            { data: 'column2', name: 'column2', orderable:true, searchable:true},
-            { data: 'total_bottle_active', name: 'total_bottle_active', orderable:true, searchable:false},
-        ],
-        initComplete: function () {
-            $('#header-filter th').each(function() {
-                var title = $(this).text();
-                var disable = $(this).attr("disable");
-                if(disable!="true"){
-                    $(this).html('<input placeholder="'+title+'" type="text" class="form-control column-search px-1 form-control-sm"/>');
-                }
-            });
-            $('#header-filter').on('keyup', ".column-search",function () {
-                dtTable
-                    .column( $(this).parent().index() )
-                    .search( this.value )
-                    .draw();
-            });
-        }
-    });
+    processing: true,serverSide: true,scrollX: true,
+    pageLength: 25,
+    order: [
+        [0, 'desc'],
+    ],
+    columnDefs: [
+        { className: 'text-center', targets: ['_all'] },
+    ],
+    ajax: '{{ route("matur-lists.dt") }}',
+    columns: [
+        { data: 'sample_number_format', name: 'tc_samples.sample_number', orderable:true, searchable:true},
+        { data: 'tc_samples.program', name: 'tc_samples.program', orderable:true, searchable:true},
+        { data: 'column1', name: 'column1', orderable:true, searchable:true},
+        { data: 'column2', name: 'column2', orderable:true, searchable:true},
+        { data: 'total_bottle_active', name: 'total_bottle_active', orderable:true, searchable:false},
+    ],
+    initComplete: function () {
+        $('#header-filter th').each(function() {
+            var title = $(this).text();
+            var disable = $(this).attr("disable");
+            if(disable!="true"){
+                $(this).html('<input placeholder="'+title+'" type="text" class="form-control column-search px-1 form-control-sm"/>');
+            }
+        });
+        $('#header-filter').on('keyup', ".column-search",function () {
+            dtTable
+                .column( $(this).parent().index() )
+                .search( this.value )
+                .draw();
+        });
+    }
+});
+
+$(document).on('click', '.btn-delete', function(e) {
+    e.preventDefault();
+    const url = $(this).data('url');
+    if (confirm('Yakin ingin menghapus data ini?')) {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                _method: 'DELETE'
+            },
+            success: function(a) {
+                showAlert(a.data.type, a.data.icon, a.data.el, a.data.msg);
+                dtTable.ajax.reload();
+            },
+            error: function(xhr) {
+                alert(xhr.responseJSON?.message || 'Terjadi kesalahan saat menghapus.');
+            }
+        });
+    }
+});
 
 $('#formImportModal').submit(function(e) {
     loader(true);

@@ -8,8 +8,10 @@ use App\Models\TcInit;
 use App\Models\TcGerminBottle;
 use App\Models\TcGerminComment;
 use App\Models\TcGerminOb;
+use App\Models\TcGerminObDetail;
 use App\Models\TcGerminTransaction;
 use App\Models\TcGerminTransfer;
+use App\Models\TcGerminTransferBottle;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DataTables;
@@ -28,6 +30,23 @@ class GerminListController extends Controller
         $data['column2'] = TcBottleInit::where('keyword','germin_column2')->first()->getAttribute('column_name');
         return view('modules.germin_list.index',compact('data'));
     }
+    public function rollbackImport($id)
+    {
+        TcGerminBottle::where('tc_init_id', $id)->forceDelete();
+        TcGerminTransaction::where('tc_init_id', $id)->forceDelete();
+        TcGerminOb::where('tc_init_id', $id)->forceDelete();
+        TcGerminObDetail::where('tc_init_id', $id)->forceDelete();
+        TcGerminTransferBottle::where('tc_init_id', $id)->forceDelete();
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'type' => 'success',
+                'icon' => 'check',
+                'el' => 'alert-area',
+                'msg' => 'Success, data has been deleted.',
+            ],
+        ]);
+    }
     public function dt()
     {
         $q = TcBottleInitDetail::select('tc_bottle_id')
@@ -44,6 +63,8 @@ class GerminListController extends Controller
             ->whereHas('tc_germin_bottles')
             ->with([
                 'tc_samples',
+                'tc_germin_bottles:id,tc_init_id,tc_worker_id,tc_laminar_id',
+                'tc_germin_transactions:id,tc_init_id,tc_worker_id',
             ])
             ->withCount([
                 'tc_germin_bottles as first_total' => function($q){
@@ -67,8 +88,17 @@ class GerminListController extends Controller
         return DataTables::of($data)
             ->addColumn('sample_number_format',function($data){
                 $el = '<p class="mb-0"><strong>'.$data->tc_samples->sample_number_display.'</strong></p>';
+                $el .= '<p class="mb-0">';
+
+                $isNotImport = $data['tc_germin_transactions']->contains(function ($item) {
+                    return $item['tc_worker_id'] != 99;
+                });
+
+                if (!$isNotImport) {
+                    $el .= '<a href="#" class="btn-delete text-danger" data-url="'.route('germin-lists.rollbackImport', $data->id).'">Delete</a>
+                            <span class="text-muted mx-1">-</span>';
+                }
                 $el .= '
-                    <p class="mb-0">
                         <a class="text-primary" href="'.route('germin-lists.show',$data->id).'">Detail</a>
                 ';
                 $el .= "

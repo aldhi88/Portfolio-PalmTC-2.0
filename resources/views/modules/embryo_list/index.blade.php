@@ -32,6 +32,11 @@
                 </div>
             </div>
 
+            <form id="form-delete" method="POST" style="display: none;">
+                @csrf
+                @method('DELETE')
+            </form>
+
             <div class="card-body">
                 <table id="myTable" class="table table-striped table-bordered nowrap table-xs w-100">
                     <thead>

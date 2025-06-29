@@ -8,8 +8,10 @@ use App\Models\TcInit;
 use App\Models\TcLiquidBottle;
 use App\Models\TcLiquidComment;
 use App\Models\TcLiquidOb;
+use App\Models\TcLiquidObDetail;
 use App\Models\TcLiquidTransaction;
 use App\Models\TcLiquidTransfer;
+use App\Models\TcLiquidTransferBottle;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DataTables;
@@ -44,6 +46,8 @@ class LiquidListController extends Controller
             ->whereHas('tc_liquid_bottles')
             ->with([
                 'tc_samples',
+                'tc_liquid_bottles:id,tc_init_id,tc_worker_id,tc_laminar_id',
+                'tc_liquid_transactions:id,tc_init_id,tc_worker_id',
             ])
             ->withCount([
                 'tc_liquid_bottles as first_total' => function($q){
@@ -67,8 +71,17 @@ class LiquidListController extends Controller
         return DataTables::of($data)
             ->addColumn('sample_number_format',function($data){
                 $el = '<p class="mb-0"><strong>'.$data->tc_samples->sample_number_display.'</strong></p>';
+                $el .= '<p class="mb-0">';
+
+                $isNotImport = $data['tc_liquid_transactions']->contains(function ($item) {
+                    return $item['tc_worker_id'] != 99;
+                });
+
+                if (!$isNotImport) {
+                    $el .= '<a href="#" class="btn-delete text-danger" data-url="'.route('liquid-lists.rollbackImport', $data->id).'">Delete</a>
+                            <span class="text-muted mx-1">-</span>';
+                }
                 $el .= '
-                    <p class="mb-0">
                         <a class="text-primary" href="'.route('liquid-lists.show',$data->id).'">Detail</a>
                 ';
                 $el .= "
@@ -132,6 +145,24 @@ class LiquidListController extends Controller
             ->rawColumns(['sample_number_format'])
             ->smart(false)
             ->toJson();
+    }
+
+    public function rollbackImport($id)
+    {
+        TcLiquidBottle::where('tc_init_id', $id)->forceDelete();
+        TcLiquidTransaction::where('tc_init_id', $id)->forceDelete();
+        TcLiquidOb::where('tc_init_id', $id)->forceDelete();
+        TcLiquidObDetail::where('tc_init_id', $id)->forceDelete();
+        TcLiquidTransferBottle::where('tc_init_id', $id)->forceDelete();
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'type' => 'success',
+                'icon' => 'check',
+                'el' => 'alert-area',
+                'msg' => 'Success, data has been deleted.',
+            ],
+        ]);
     }
 
     public function show($id)

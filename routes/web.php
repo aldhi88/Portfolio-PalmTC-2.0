@@ -413,6 +413,7 @@ Route::name('embryo-lists.')->group(function () {
         Route::get('dtShow2', [EmbryoListController::class, 'dtShow2'])->name('dtShow2');
         Route::post('storeSubtraction', [EmbryoListController::class, 'storeSubtraction'])->name('storeSubtraction');
         Route::get('showSubtraction', [EmbryoListController::class, 'showSubtraction'])->name('showSubtraction');
+        Route::delete('rollbackImport/{id}', [EmbryoListController::class, 'rollbackImport'])->name('rollbackImport');
         Route::delete('destroySubtraction', [EmbryoListController::class, 'destroySubtraction'])->name('destroySubtraction');
         // Route::get('dtListBottle', [EmbryoListController::class, 'dtListBottle'])->name('dtListBottle');
 
@@ -469,6 +470,7 @@ Route::name('liquid-lists.')->group(function () {
 
         Route::get('dtShow', [LiquidListController::class, 'dtShow'])->name('dtShow');
         Route::get('dtShow2', [LiquidListController::class, 'dtShow2'])->name('dtShow2');
+        Route::delete('rollbackImport/{id}', [LiquidListController::class, 'rollbackImport'])->name('rollbackImport');
 
         // comment
         Route::get('comment/{id}', [LiquidListController::class, 'comment'])->name('comment');
@@ -536,6 +538,8 @@ Route::name('matur-lists.')->group(function () {
 
         Route::get('dtShow', [MaturListController::class, 'dtShow'])->name('dtShow');
         Route::get('dtShow2', [MaturListController::class, 'dtShow2'])->name('dtShow2');
+        Route::delete('rollbackImport/{id}', [MaturListController::class, 'rollbackImport'])->name('rollbackImport');
+
 
         // comment
         Route::get('comment/{id}', [MaturListController::class, 'comment'])->name('comment');
@@ -603,6 +607,8 @@ Route::name('germin-lists.')->group(function () {
 
         Route::get('dtShow', [GerminListController::class, 'dtShow'])->name('dtShow');
         Route::get('dtShow2', [GerminListController::class, 'dtShow2'])->name('dtShow2');
+        Route::delete('rollbackImport/{id}', [GerminListController::class, 'rollbackImport'])->name('rollbackImport');
+
 
         // comment
         Route::get('comment/{id}', [GerminListController::class, 'comment'])->name('comment');
@@ -669,6 +675,8 @@ Route::name('rooting-lists.')->group(function () {
         Route::get('dt', [RootingListController::class, 'dt'])->name('dt');
         Route::get('dtShow', [RootingListController::class, 'dtShow'])->name('dtShow');
         Route::get('dtShow2', [RootingListController::class, 'dtShow2'])->name('dtShow2');
+        Route::delete('rollbackImport/{id}', [RootingListController::class, 'rollbackImport'])->name('rollbackImport');
+
 
         // comment
         Route::get('comment/{id}', [RootingListController::class, 'comment'])->name('comment');

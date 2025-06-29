@@ -8,8 +8,10 @@ use App\Models\TcInit;
 use App\Models\TcMaturBottle;
 use App\Models\TcMaturComment;
 use App\Models\TcMaturOb;
+use App\Models\TcMaturObDetail;
 use App\Models\TcMaturTransaction;
 use App\Models\TcMaturTransfer;
+use App\Models\TcMaturTransferBottle;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DataTables;
@@ -28,6 +30,25 @@ class MaturListController extends Controller
         $data['column2'] = TcBottleInit::where('keyword','matur_column2')->first()->getAttribute('column_name');
         return view('modules.matur_list.index',compact('data'));
     }
+
+    public function rollbackImport($id)
+    {
+        TcMaturBottle::where('tc_init_id', $id)->forceDelete();
+        TcMaturTransaction::where('tc_init_id', $id)->forceDelete();
+        TcMaturOb::where('tc_init_id', $id)->forceDelete();
+        TcMaturObDetail::where('tc_init_id', $id)->forceDelete();
+        TcMaturTransferBottle::where('tc_init_id', $id)->forceDelete();
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'type' => 'success',
+                'icon' => 'check',
+                'el' => 'alert-area',
+                'msg' => 'Success, data has been deleted.',
+            ],
+        ]);
+    }
+
     public function dt()
     {
         $q = TcBottleInitDetail::select('tc_bottle_id')
@@ -44,6 +65,8 @@ class MaturListController extends Controller
             ->whereHas('tc_matur_bottles')
             ->with([
                 'tc_samples',
+                'tc_matur_bottles:id,tc_init_id,tc_worker_id,tc_laminar_id',
+                'tc_matur_transactions:id,tc_init_id,tc_worker_id',
             ])
             ->withCount([
                 'tc_matur_bottles as first_total' => function($q){
@@ -66,8 +89,17 @@ class MaturListController extends Controller
         return DataTables::of($data)
             ->addColumn('sample_number_format',function($data){
                 $el = '<p class="mb-0"><strong>'.$data->tc_samples->sample_number_display.'</strong></p>';
+                $el .= '<p class="mb-0">';
+
+                $isNotImport = $data['tc_matur_transactions']->contains(function ($item) {
+                    return $item['tc_worker_id'] != 99;
+                });
+
+                if (!$isNotImport) {
+                    $el .= '<a href="#" class="btn-delete text-danger" data-url="'.route('matur-lists.rollbackImport', $data->id).'">Delete</a>
+                            <span class="text-muted mx-1">-</span>';
+                }
                 $el .= '
-                    <p class="mb-0">
                         <a class="text-primary" href="'.route('matur-lists.show',$data->id).'">Detail</a>
                 ';
                 $el .= "

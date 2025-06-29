@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TcInit extends Model
@@ -118,6 +119,9 @@ class TcInit extends Model
     public function tc_rooting_bottles(){
         return $this->hasMany(TcRootingBottle::class,'tc_init_id');
     }
+    public function tc_rooting_transactions():HasMany{
+        return $this->hasMany(TcRootingTransaction::class,'tc_init_id','id');
+    }
     public function tc_germin_transfer_bottles(){
         return $this->hasMany(TcGerminTransferBottle::class,'tc_init_id');
     }
@@ -129,6 +133,9 @@ class TcInit extends Model
     }
     public function tc_germin_bottles(){
         return $this->hasMany(TcGerminBottle::class,'tc_init_id');
+    }
+    public function tc_germin_transactions():HasMany{
+        return $this->hasMany(TcGerminTransaction::class,'tc_init_id','id');
     }
     public function tc_matur_transfer_bottles(){
         return $this->hasMany(TcMaturTransferBottle::class,'tc_init_id');
@@ -142,8 +149,14 @@ class TcInit extends Model
     public function tc_matur_bottles(){
         return $this->hasMany(TcMaturBottle::class,'tc_init_id');
     }
+    public function tc_matur_transactions():HasMany{
+        return $this->hasMany(TcMaturTransaction::class,'tc_init_id','id');
+    }
     public function tc_liquid_transfer_bottles(){
         return $this->hasMany(TcLiquidTransferBottle::class,'tc_init_id');
+    }
+    public function tc_liquid_bottles():HasMany{
+        return $this->hasMany(TcLiquidBottle::class,'tc_init_id','id');
     }
     public function tc_liquid_transfers(){
         return $this->hasMany(TcLiquidTransfer::class,'tc_init_id');
@@ -151,8 +164,8 @@ class TcInit extends Model
     public function tc_liquid_obs(){
         return $this->hasMany(TcLiquidOb::class,'tc_init_id');
     }
-    public function tc_liquid_bottles(){
-        return $this->hasMany(TcLiquidBottle::class,'tc_init_id');
+    public function tc_liquid_transactions():HasMany{
+        return $this->hasMany(TcLiquidBottle::class,'tc_init_id','id');
     }
     public function tc_embryo_transfer_bottles(){
         return $this->hasMany(TcEmbryoTransferBottle::class,'tc_init_id');
@@ -163,8 +176,11 @@ class TcInit extends Model
     public function tc_embryo_obs(){
         return $this->hasMany(TcEmbryoOb::class,'tc_init_id');
     }
-    public function tc_embryo_bottles(){
-        return $this->hasMany(TcEmbryoBottle::class,'tc_init_id');
+    public function tc_embryo_bottles():HasMany{
+        return $this->hasMany(TcEmbryoBottle::class,'tc_init_id','id');
+    }
+    public function tc_embryo_lists():HasMany{
+        return $this->hasMany(TcEmbryoList::class,'tc_init_id','id');
     }
     public function tc_callus_transfer_bottles(){
         return $this->hasMany(TcCallusTransferBottle::class,'tc_init_id','id');
