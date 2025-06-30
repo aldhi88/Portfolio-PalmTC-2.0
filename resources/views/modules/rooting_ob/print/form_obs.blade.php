@@ -81,7 +81,7 @@
                 <tr class="text-center">
                     <td>{{ $item->tc_inits->tc_samples->program }}</td>
                     <td>{{ $item->tc_inits->tc_samples->sample_number_display }}</td>
-                    <td>{{ \Carbon\Carbon::parse($item->date_work)->format('d//m/Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item->bottle_date)->format('d//m/Y') }}</td>
                     <td>{{ $item->alpha }}</td>
                     <td>{{ $item->tc_workers->code }}</td>
                     <td>{{ $item->tc_rooting_transactions[0]->last_leaf??$item->leaf_count }}</td>
